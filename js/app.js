@@ -138,6 +138,10 @@ function addPts() {
         scores.innerText = score;
         add = false;
     }
+    if (score === 200) {
+        message.innerText = 'You win!';
+        endPanel.style.visibility = 'visible';
+    }
 }
 
 function restartGame() {
