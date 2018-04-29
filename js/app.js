@@ -103,13 +103,66 @@ Player.prototype.checkCollisions = function () {
             setTimeout(function () {
                 loseLive();
                 player.reset();
-//                allEnemies.forEach(function (e) {
-//                    e.reset();
-//                });
+                //                allEnemies.forEach(function (e) {
+                //                    e.reset();
+                //                });
             }, 200);
         }
     }
 }
+
+const gemIcons = ['images/GemBlue.png', 'images/GemGreen.png', 'images/GemOrange.png'];
+
+const Gem = function () {
+    this.x = -100;
+    this.y = -100;
+    this.width = 50;
+    this.height = 50;
+    let i = Math.floor(Math.random() * 3);
+    this.sprite = gemIcons[i];
+    
+}
+
+Gem.prototype.update = function() {
+    if (score === 30) {
+    this.x = Math.floor(Math.random() * 400);
+    this.y = 64 + ((Math.floor(Math.random() * 4)) * 82);
+          ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+}
+    
+}
+
+Gem.prototype.render = function () {
+    
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    
+    
+    
+    this.grabGem();
+};
+
+Gem.prototype.grabGem = function () {
+    if (player.x < this.x + 50 && player.x + 50 > this.x &&
+        player.y < this.y + 50 && player.y + 50 > this.y) {
+        this.gemReset();
+    }
+};
+
+
+Gem.prototype.gemReset = function () {
+    this.x = -100;
+    this.y = -100;
+    score += 10;
+    scores.innerText = score;
+
+};
+
+
+
+
+
+
+const gem = new Gem;
 
 const allEnemies = [];
 const player = new Player;
@@ -119,6 +172,7 @@ while (a > 0) {
     allEnemies.push(enemy);
     a--;
 }
+gem.update();
 
 function loseLive() {
     if (collision) {
