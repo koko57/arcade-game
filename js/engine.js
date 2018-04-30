@@ -155,7 +155,11 @@ var Engine = (function(global) {
         });
 
         player.render();
-        gem.render();
+        
+        gems.forEach(function(gem) {
+           gem.render();
+        });
+
     }
 
     /* This function does nothing but it could have been a good place to
