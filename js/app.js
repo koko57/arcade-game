@@ -3,6 +3,7 @@ let collision = false;
 let add = false;
 let lives = 3;
 let a = 5;
+let level = 1;
 
 const endPanel = document.querySelector('.end-panel');
 const playBtn = document.querySelector('.play-again');
@@ -12,6 +13,9 @@ const livesCounter = document.getElementById('lives');
 const hearts = document.getElementsByClassName('fa-heart');
 const scores = document.getElementById('score');
 scores.innerText = score;
+
+
+scoreCounter();
 
 // Enemies our player must avoid
 const Enemy = function () {
@@ -91,6 +95,8 @@ Player.prototype.update = function () {
         }, 200);
     }
     this.checkCollisions();
+    this.collectGem();
+   
 }
 
 Player.prototype.checkCollisions = function () {
@@ -113,56 +119,55 @@ Player.prototype.checkCollisions = function () {
 
 const gemIcons = ['images/GemBlue.png', 'images/GemGreen.png', 'images/GemOrange.png'];
 
+let rand = Math.floor(Math.random() * 3);
+
+
 const Gem = function () {
     this.x = -100;
     this.y = -100;
     this.width = 50;
     this.height = 50;
-    let i = Math.floor(Math.random() * 3);
-    this.sprite = gemIcons[i];
+    this.sprite = gemIcons[rand];
+//    this.changeLoc();
     
 }
 
-Gem.prototype.update = function() {
-    if (score === 30) {
-    this.x = Math.floor(Math.random() * 400);
-    this.y = 64 + ((Math.floor(Math.random() * 4)) * 82);
-          ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
+Gem.prototype.changeLoc = function() {
+    this.x = 50 + Math.floor(Math.random() * 400);
+    this.y = 112 + ((Math.floor(Math.random() * 4)) * 82);
     
 }
 
 Gem.prototype.render = function () {
-    
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     
-    
-    
-    this.grabGem();
 };
 
-Gem.prototype.grabGem = function () {
-    if (player.x < this.x + 50 && player.x + 50 > this.x &&
-        player.y < this.y + 50 && player.y + 50 > this.y) {
-        this.gemReset();
+Player.prototype.collectGem = function () {
+    if (this.x < gem.x + 40 &&
+   this.x + 60 > gem.x &&
+   this.y < gem.y + 20 &&
+   180 + this.y > gem.y) {
+        gem.gemReset();
     }
 };
-
 
 Gem.prototype.gemReset = function () {
     this.x = -100;
     this.y = -100;
+    
     score += 10;
-    scores.innerText = score;
+//    scores.innerText = score;
 
 };
 
 
+setTimeout(function() {
+    gem.changeLoc();  
+    }, 4000)
+    
 
-
-
-
-const gem = new Gem;
+let gem = new Gem;
 
 const allEnemies = [];
 const player = new Player;
@@ -172,7 +177,18 @@ while (a > 0) {
     allEnemies.push(enemy);
     a--;
 }
-gem.update();
+
+
+function scoreCounter() {
+    scores.innerText = score;
+    if (score === 30) {
+        level = 2;
+        gem.changeLoc();
+    }
+}
+
+
+
 
 function loseLive() {
     if (collision) {
@@ -196,7 +212,9 @@ function addPts() {
         message.innerText = 'You win!';
         endPanel.style.visibility = 'visible';
     }
+   
 }
+
 
 function restartGame() {
     lives = 3;
