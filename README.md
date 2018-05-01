@@ -1,9 +1,9 @@
 # Arcade Game: Frogger
 ## front-end udacity nanodegree project
 
-*[About the Game] (#aboutthegame)
-*[How to Play] (#howtoplay)
-*[Code Dependencies] (#codedependencies)
+* [About the Game](#aboutthegame)
+* [How to Play](#howtoplay)
+* [Code Dependencies](#codedependencies)
 
 ## About the Game
 
