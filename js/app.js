@@ -1,55 +1,50 @@
 let score = 0;
-let collision = false;
-let add = false;
 let lives = 3;
-let a = 3;
 let level = 1;
 let extraSpeed = 0;
+// checking if the Player collided with an enemy or crossed the board
+let collision = false;
+let crossed = false;
 
 const endPanel = $('.end-panel');
+endPanel.hide();
+const scores = $('#score');
 const msg = $('#msg');
+const lvl = $('#lvl');
 const livesCounter = $('lives');
 const hearts = $('.fa-heart');
-$('#score').text(score);
-$('#lvl').text(level);
+scores.text(score);
+lvl.text(level);
 
-// Enemies our player must avoid
-class Enemy {
-    constructor() {
-        this.x = Math.floor(Math.random() * 400);
-        this.y = 64 + ((Math.floor(Math.random() * 4)) * 82);
-        this.speed = Math.floor(Math.random() * 100) + 50 + extraSpeed;
-        this.width = 80;
-        this.height = 60;
-        this.sprite = 'images/enemy-bug.png';
-    }
-    update(dt) {
-        this.x += this.speed * dt;
-        if (this.x > 500) {
-            this.reset();
-        }
-    }
-    reset() {
-        this.x = -100;
-        this.y = 64 + ((Math.floor(Math.random() * 4)) * 82);
+// SuperClass for all characters
+class Char {
+    constructor(x, y, sprite, height, width) {
+        this.x = x;
+        this.y = y;
+        this.sprite = sprite;
+        this.width = width;
+        this.height = height;
     }
     render() {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
-};
+    reset(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+}
 
-
-class Player {
-    constructor() {
-        this.sprite = 'images/char-boy.png';
-        this.x = 200;
-        this.y = 380;
-        this.height = 75;
-        this.width = 60;
+class Player extends Char {
+    constructor(x = 200, y = 380, sprite = 'images/char-boy.png', height = 75, width = 60) {
+        super(x, y, sprite, height, width);
     }
     render() {
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+        super.render();
     }
+    reset(x = 200, y = 380) {
+        super.reset(x, y);
+    }
+    // move limitations
     handleInput(evn) {
         switch (evn) {
             case 'left':
@@ -74,100 +69,114 @@ class Player {
                 break;
         }
     }
-    reset() {
-        this.x = 200;
-        this.y = 380;
-    }
+    // collision detection with enemies
     checkCollisions() {
         for (let i = 0; i < allEnemies.length; i++) {
             if (this.x < allEnemies[i].x + 70 && this.x + 60 > allEnemies[i].x &&
                 this.y < allEnemies[i].y + 50 && 65 + this.y > allEnemies[i].y) {
                 collision = true;
-                setTimeout(function () {
+                setTimeout(() => {
                     loseLive();
                     player.reset();
                 }, 200);
             }
         }
     }
+    // collision detection with gems
     collectGem() {
         for (let i = 0; i < gems.length; i++) {
-            if (this.x < gems[i].x + 40 &&
-                this.x + 80 > gems[i].x &&
-                this.y < gems[i].y + 20 &&
-                70 + this.y > gems[i].y) {
-                gems[i].gemReset();
+            if (this.x < gems[i].x + 40 && this.x + 80 > gems[i].x &&
+                this.y < gems[i].y + 20 && this.y + 70 > gems[i].y) {
+                addPts();
+                gems[i].reset();
             }
         }
     }
     update() {
         if (this.y < 50) {
-            add = true;
-            setTimeout(function () {
-                addPts();
+            // kind of 
+            crossed = true;
+            // setTimeout to show the last step (that the player reaches the other side of the board)
+            setTimeout(() => {
+                levelUp();
                 player.reset();
             }, 200);
         }
         this.checkCollisions();
         this.collectGem();
     }
-};
-
-
-const gemIcons = ['images/GemBlue.png', 'images/GemGreen.png', 'images/GemOrange.png'];
-let rand = Math.floor(Math.random() * 3);
-
-class Gem {
-    constructor(col) {
+}
+// 
+class Enemy extends Char {
+    constructor(x = -100, y, sprite = 'images/enemy-bug.png', height = 60, width = 80) {
+        super(x, y, sprite, height, width);
+        this.y = 64 + ((Math.floor(Math.random() * 4)) * 82);
+        this.speed = Math.floor(Math.random() * 100) + 50; + extraSpeed;
+    }
+    render() {
+        super.render();
+    }
+    reset(x, y) {
         this.x = -100;
-        this.y = -100;
-        this.width = 50;
-        this.height = 50;
+        this.y = 64 + ((Math.floor(Math.random() * 4)) * 82);
+    }
+    update(dt) {
+        this.x += this.speed * dt;
+        if (this.x > 500) {
+            this.reset();
+        }
+    }
+}
+
+class Gem extends Char {
+    constructor(col, x = -100, y = -100, sprite, height = 50, width = 50) {
+        super(x, y, sprite, height, width);
+        // choose spite image from the array
         this.sprite = gemIcons[col];
     }
     render() {
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+        super.render();
     }
+    // changes the x and y to let the gem appear again on the board after being hidden
     changeLoc() {
         this.x = 50 + Math.floor(Math.random() * 400);
         this.y = 112 + ((Math.floor(Math.random() * 4)) * 82);
     }
-
-    hide() {
+    hideGem() {
         this.x = -100;
         this.y = -100;
     }
-    gemReset() {
-        this.hide();
-        score += 10;
-        $('#score').text(score);
+    reset() {
+        this.hideGem();
         let time = Math.floor(Math.random() * 6000);
-        setTimeout(function () {
-            rand = Math.floor(Math.random() * 3);
-            gems[rand].changeLoc();
-        }, time);
+        setTimeout(randomGem, time);
     }
-
 }
 
-setTimeout(() => {
-    gems[rand].changeLoc();
-}, 4000);
+// array of images of gems
+const gemIcons = ['images/GemBlue.png', 'images/GemGreen.png', 'images/GemOrange.png'];
 
-const gems = [];
-const gemBlue = new Gem(0),
-    gemGreen = new Gem(1),
-    gemOrange = new Gem(2);
-gems.push(gemBlue, gemGreen, gemOrange);
-
-const allEnemies = [];
 const player = new Player;
+const allEnemies = [];
+// the array of gems contains 3 gems - blue, green and orange
+//they appear an the board at random 
+//after being collected they are hidden
+const gems = [];
 
-while (a > 0) {
-    var enemy = new Enemy;
+for (let i = 0; i < 3; i++) {
+    const gem = new Gem(i);
+    gems.push(gem);
+    const enemy = new Enemy;
     allEnemies.push(enemy);
-    a--;
 }
+//delay for the first gem to appear
+setTimeout(randomGem, 4000);
+
+function randomGem() {
+    let rand = Math.floor(Math.random() * 3);
+    gems[rand].changeLoc();
+}
+
 
 function loseLive() {
     if (collision) {
@@ -177,24 +186,27 @@ function loseLive() {
     }
     if (lives === 0) {
         msg.html(`<h2>Game Over!</h2><br><p>Your score: ${score}</p>`)
-        endPanel.css('visibility', 'visible');
+        endPanel.show();
     }
 }
-
-function addPts() {
-    if (add) {
+//
+function levelUp() {
+    if (crossed) {
         level++;
-        $('#lvl').text(level);
-        score += 10;
-        $('#score').text(score);
-        add = false;
+        lvl.text(level);
+        addPts();
+        crossed = false;
         checkLevel();
-
     }
     if (score === 300) {
-        msg.text('You win!');
-        endPanel.css('visibility', 'visible');
+        msg.html(`<h2>You win!</h2><br><p>Your score: ${score}</p>`);
+        endPanel.show();
     }
+}
+// adds ten points to the score
+function addPts() {
+    score += 10;
+    scores.text(score);
 }
 
 function restartGame() {
@@ -204,20 +216,23 @@ function restartGame() {
     };
     score = 0;
     level = 1;
-    $('#score').text(score);
-    $('#lvl').text(level);
+    extraSpeed = 0;
+    scores.text(score);
+    lvl.text(level);
+    // resets the enemies' location
     allEnemies.forEach(function (e) {
         e.reset();
     });
+    // delets 2 of the enemies
     while (allEnemies.length > 3) {
         allEnemies.pop();
     }
-    extraSpeed = 0;
     gems.forEach(function (e) {
-        e.hide();
+        e.hideGem();
     });
+    setTimeout(randomGem, 4000);
 }
-
+//changes the difficulty of the game
 function checkLevel() {
     switch (level) {
         case 3:
@@ -236,10 +251,9 @@ function checkLevel() {
             break;
         case 15:
             msg.html(`<h2>You win!</h2><br><p>Your score: ${score}</p>`);
-            endPanel.css('visibility', 'visible');
+            endPanel.show();
     }
 }
-
 
 $(document).keyup((e) => {
     const allowedKeys = {
@@ -253,6 +267,6 @@ $(document).keyup((e) => {
 
 $('.play-again').on('click', () => {
     restartGame();
-    endPanel.css('visibility', 'hidden');
+    endPanel.hide();
     msg.text('');
 });

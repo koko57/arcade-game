@@ -1,55 +1,72 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box; }
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
-  text-align: center; }
+    text-align: center;
+}
 
 .wrapper {
-  width: 400px;
-  margin: 0 auto;
-  font: 1.2em 'Indie Flower', sans-serif; }
-  .wrapper h1 {
-    margin: 25px auto 15px; }
-  .wrapper .score-panel {
+    width: 400px;
+    margin: 0 auto;
+    font: 1.2em 'Indie Flower', sans-serif;
+}
+
+.wrapper h1 {
+    margin: 25px auto 15px;
+}
+
+.wrapper .score-panel {
     max-width: 500px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between; }
-  .wrapper .end-panel {
+    justify-content: space-between;
+}
+
+.wrapper .end-panel {
     width: 400px;
     height: 310px;
     position: absolute;
     top: 250px;
     padding: 50px;
-    visibility: hidden;
     background: linear-gradient(rgba(192, 72, 72, 0.8), rgba(72, 0, 72, 0.8));
     border-radius: 20px;
     font-size: 1.5em;
     color: #fff;
     text-align: center;
-    z-index: 4; }
-    .wrapper .end-panel p {
-      position: relative;
-      top: -1em; }
-    .wrapper .end-panel .play-again {
-      width: 180px;
-      margin: 20px auto;
-      border: 2px dashed #fff;
-      border-radius: 40px;
-      padding: 10px 20px;
-      cursor: pointer;
-      position: relative;
-      top: -1em; }
-      .wrapper .end-panel .play-again:hover {
-        border: 2px solid #fff; }
-      .wrapper .end-panel .play-again:active {
-        top: 3px; }
+    z-index: 4;
+}
+
+.wrapper .end-panel p {
+    position: relative;
+    top: -1em;
+}
+
+.wrapper .end-panel .play-again {
+    width: 180px;
+    margin: 20px auto;
+    border: 2px dashed #fff;
+    border-radius: 40px;
+    padding: 10px 20px;
+    cursor: pointer;
+    position: relative;
+    top: -1em;
+}
+
+.wrapper .end-panel .play-again:hover {
+    border: 2px solid #fff;
+}
+
+.wrapper .end-panel .play-again:active {
+    top: 3px;
+}
 
 canvas {
-  margin: 2px;
-  position: relative;
-  top: -30px; }
+    margin: 2px;
+    position: relative;
+    top: -30px;
+}
 
 /*# sourceMappingURL=style.css.map */
