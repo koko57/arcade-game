@@ -1,6 +1,27 @@
-frontend-nanodegree-arcade-game
-===============================
+# Arcade Game: Frogger
+## front-end udacity nanodegree project
 
-Students should use this [rubric](https://review.udacity.com/#!/projects/2696458597/rubric) for self-checking their submission. Make sure the functions you write are **object-oriented** - either class functions (like Player and Enemy) or class prototype functions such as Enemy.prototype.checkCollisions, and that the keyword 'this' is used appropriately within your class and class prototype functions to refer to the object the function is called upon. Also be sure that the **readme.md** file is updated with your instructions on both how to 1. Run and 2. Play your arcade game.
+*[About the Game] (#aboutthegame)
+*[How to Play] (#howtoplay)
+*[Code Dependencies] (#codedependencies)
 
-For detailed instructions on how to get started, check out this [guide](https://docs.google.com/document/d/1v01aScPjSWCCWQLIpFqvg3-vXLH2e8_SZQKC8jNO0Dc/pub?embedded=true).
+## About the Game
+
+This is a frogger-style classic arcade game where you have to avoid the enemies and cross the board to win. When you succeed - you will be given 10 pts and the level goes up and the difficulty of the game increases every 3 levels. If you collide with the bug - you lose life. Remember! You have only 3 lives. You can gain additional points by collecting gems that appear on the board. 
+You win when you reach 15th level or score 500 points. 
+To move your avatar use the arrow keys.
+
+Have fun and good luck!
+
+## How to Play
+
+Download this repo(https://github.com/koko57/arcade-game.git) and launch index.html in your browser
+
+or 
+
+play here: https://koko57.github.io/arcade-game/
+
+
+## Code Dependencies
+
+Source code from: https://github.com/udacity/frontend-nanodegree-arcade-game
