@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body {
@@ -26,12 +27,10 @@ body {
 
 .wrapper .end-panel {
     width: 400px;
-    height: 300px;
+    height: 310px;
     position: absolute;
     top: 250px;
-    box-sizing: border-box;
     padding: 50px;
-    visibility: hidden;
     background: linear-gradient(rgba(192, 72, 72, 0.8), rgba(72, 0, 72, 0.8));
     border-radius: 20px;
     font-size: 1.5em;
@@ -40,14 +39,20 @@ body {
     z-index: 4;
 }
 
+.wrapper .end-panel p {
+    position: relative;
+    top: -1em;
+}
+
 .wrapper .end-panel .play-again {
-    width: 130px;
-    margin: 30px auto;
+    width: 180px;
+    margin: 20px auto;
     border: 2px dashed #fff;
     border-radius: 40px;
-    padding: 15px 30px;
+    padding: 10px 20px;
     cursor: pointer;
     position: relative;
+    top: -1em;
 }
 
 .wrapper .end-panel .play-again:hover {
