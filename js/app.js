@@ -108,9 +108,6 @@ Player.prototype.checkCollisions = function () {
             setTimeout(function () {
                 loseLive();
                 player.reset();
-                //                allEnemies.forEach(function (e) {
-                //                    e.reset();
-                //                });
             }, 200);
         }
     }
@@ -148,8 +145,7 @@ Player.prototype.collectGem = function () {
 };
 
 Gem.prototype.gemReset = function () {
-    this.x = -100;
-    this.y = -100;
+    this.hide();
     score += 10;
     scores.innerText = score;
     let time = Math.floor(Math.random() * 6000);
@@ -158,7 +154,10 @@ Gem.prototype.gemReset = function () {
         gems[rand].changeLoc();
     }, time);
 };
-
+Gem.prototype.hide = function () {
+    this.x = -100;
+    this.y = -100;
+}
 
 setTimeout(function () {
     gems[rand].changeLoc();
@@ -194,12 +193,12 @@ function loseLive() {
 function addPts() {
     if (add) {
         level++;
-    lvl.innerText = level;
+        lvl.innerText = level;
         score += 10;
         scores.innerText = score;
         add = false;
         checkLevel();
-    
+
     }
     if (score === 500) {
         message.innerText = 'You win!';
@@ -216,6 +215,21 @@ function restartGame() {
     };
     score = 0;
     scores.innerText = score;
+    level = 1;
+    lvl.innerText = level;
+    allEnemies.forEach(function (e) {
+        e.reset();
+    });
+    while (allEnemies.length > 3) {
+        allEnemies.pop();
+    }
+    extraSpeed = 0;
+      gems.forEach(function (e) {
+        e.hide();
+    }); 
+    
+
+    
 }
 
 
@@ -243,18 +257,18 @@ function checkLevel() {
 }
 
 
-    document.addEventListener('keyup', function (e) {
-        const allowedKeys = {
-            37: 'left',
-            38: 'up',
-            39: 'right',
-            40: 'down'
-        };
-        player.handleInput(allowedKeys[e.keyCode]);
-    });
+document.addEventListener('keyup', function (e) {
+    const allowedKeys = {
+        37: 'left',
+        38: 'up',
+        39: 'right',
+        40: 'down'
+    };
+    player.handleInput(allowedKeys[e.keyCode]);
+});
 
-    playBtn.addEventListener('click', function () {
-        restartGame();
-        endPanel.style.visibility = 'hidden';
-        message.innerText = '';
-    });
+playBtn.addEventListener('click', function () {
+    restartGame();
+    endPanel.style.visibility = 'hidden';
+    message.innerText = '';
+});
