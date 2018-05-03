@@ -6,12 +6,21 @@ let extraSpeed = 0;
 let collision = false;
 let crossed = false;
 
+// array of images of gems
+const gemIcons = ['images/GemBlue.png', 'images/GemGreen.png', 'images/GemOrange.png'];
+
+const allEnemies = [];
+// the array of gems contains 3 gems - blue, green and orange
+//they appear an the board at random 
+//after being collected they are hidden
+const gems = [];
+
 const endPanel = $('.end-panel');
 endPanel.hide();
 const scores = $('#score');
 const msg = $('#msg');
 const lvl = $('#lvl');
-const livesCounter = $('lives');
+const livesCounter = $('#lives');
 const hearts = $('.fa-heart');
 scores.text(score);
 lvl.text(level);
@@ -153,15 +162,7 @@ class Gem extends Char {
     }
 }
 
-// array of images of gems
-const gemIcons = ['images/GemBlue.png', 'images/GemGreen.png', 'images/GemOrange.png'];
-
 const player = new Player;
-const allEnemies = [];
-// the array of gems contains 3 gems - blue, green and orange
-//they appear an the board at random 
-//after being collected they are hidden
-const gems = [];
 
 for (let i = 0; i < 3; i++) {
     const gem = new Gem(i);
@@ -223,7 +224,7 @@ function restartGame() {
     allEnemies.forEach(function (e) {
         e.reset();
     });
-    // delets 2 of the enemies
+    // deletion of 2 of the enemies
     while (allEnemies.length > 3) {
         allEnemies.pop();
     }
