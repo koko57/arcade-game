@@ -60,7 +60,7 @@ body {
 }
 
 .wrapper .end-panel .play-again:active {
-    top: 3px;
+    top: -0.9em;
 }
 
 canvas {
